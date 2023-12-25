@@ -1,0 +1,4 @@
+name: Genesis
+version: '${project.version}'
+main: mintychochip.genesis.Genesis
+api-version: '1.20'
