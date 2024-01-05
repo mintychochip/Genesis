@@ -5,15 +5,6 @@ import org.bukkit.entity.Player;
 public class GenesisPlayer {
 
     private Player player;
+    private PlayerSettings playerSettings;
 
-    private boolean particles;
-
-    public GenesisPlayer setParticles(boolean particles) {
-        this.particles = particles;
-        return this;
-    }
-
-    public boolean isParticles() {
-        return particles;
-    }
 }

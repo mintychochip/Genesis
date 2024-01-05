@@ -16,7 +16,10 @@ public class MathUtil {
     public Random getRandom() {
         return random;
     }
-
+    public static boolean finishedDuration(double duration, long start) {
+        long l = (System.currentTimeMillis() - start) / 1000;
+        return l >= duration;
+    }
     public static double roundToDecimals(double d, int c) {
         int temp = (int) (d * java.lang.Math.pow(10, c));
         return ((double) temp) / java.lang.Math.pow(10, c);

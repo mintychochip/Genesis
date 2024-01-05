@@ -13,9 +13,10 @@ public class Keys {
         generateKey(Genesis.getInstance(),"unstackable");
     }
 
-    public void generateKey(JavaPlugin plugin, String key) {
+    public NamespacedKey generateKey(JavaPlugin plugin, String key) {
         NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
         keys.put(key,namespacedKey);
+        return namespacedKey;
     }
 
     public void putKey(NamespacedKey namespacedKey, String key) {
