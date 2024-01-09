@@ -14,11 +14,8 @@ public class Keys {
     }
 
     public NamespacedKey generateKey(JavaPlugin plugin, String key) {
-        NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
-        keys.put(key,namespacedKey);
-        return namespacedKey;
+        return new NamespacedKey(plugin,key);
     }
-
     public void putKey(NamespacedKey namespacedKey, String key) {
         keys.put(key,namespacedKey);
     }

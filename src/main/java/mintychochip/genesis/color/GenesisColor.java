@@ -1,5 +1,9 @@
 package mintychochip.genesis.color;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.bukkit.ChatColor;
 
 public class GenesisColor {

@@ -29,6 +29,15 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <scmCommentPrefix>
+
+                    </scmCommentPrefix>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0</version>
                 <executions>
@@ -44,7 +53,7 @@
                             </transformers>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <finalName>${project.artifactId}-${project.version}-something</finalName>
-                            <outputDirectory>D:\papers\plugins</outputDirectory>
+                            <outputDirectory>Z:\paper</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -71,6 +80,11 @@
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-api</artifactId>
+            <version>4.14.0</version>
+        </dependency>
         <dependency>
             <groupId>com.fathzer</groupId>
             <artifactId>javaluator</artifactId>
