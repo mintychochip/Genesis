@@ -3,6 +3,7 @@ package mintychochip.genesis.builder;
 import mintychochip.genesis.Genesis;
 import mintychochip.genesis.color.GenesisColor;
 import mintychochip.genesis.color.GenesisTheme;
+import mintychochip.genesis.config.GenesisRegistry;
 import mintychochip.genesis.container.AbstractItem;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Panda;
@@ -14,12 +15,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ItemBuilder {
+public class ItemBuilder {
 
     protected AbstractItem abstractItem;
     protected List<String> lore;
-
     protected GenesisTheme genesisTheme;
+
+    public ItemBuilder(AbstractItem abstractItem, String genesisTheme) {
+        this.abstractItem = abstractItem;
+        this.genesisTheme = GenesisRegistry.getThemes().get(genesisTheme);
+        abstractItem.getItemMeta().getPersistentDataContainer().set(Genesis.getKey("abstract"),PersistentDataType.BOOLEAN,true);
+        if(abstractItem.isBoundOnCraft()) {
+            abstractItem.getItemMeta().getPersistentDataContainer().set(Genesis.getKey("bind"),PersistentDataType.BOOLEAN,abstractItem.isBoundOnCraft());
+        }
+    }
 
     public ItemBuilder(AbstractItem abstractItem, GenesisTheme genesisTheme) {
         this.abstractItem = abstractItem;
@@ -34,8 +43,13 @@ public abstract class ItemBuilder {
         return this;
     }
     public ItemBuilder setDisplayName(String name, ChatColor chatColor) {
-        abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(genesisTheme.getHeaderColor(),chatColor.getChar(),name));
-        return this;
+        if(chatColor == null) {
+            abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(ChatColor.getByChar(genesisTheme.getHeaderColor()),null,name));
+            return this;
+        } else {
+            abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(genesisTheme.getHeaderColor(),chatColor.getChar(),name));
+            return this;
+        }
     }
     public ItemBuilder addBulletedLore(String term, String text) {
         addBulletedLore(term,text,null);

@@ -1,5 +1,6 @@
 package mintychochip.genesis.util;
 
+import com.fathzer.soft.javaluator.StaticVariableSet;
 import mintychochip.genesis.Genesis;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
@@ -53,6 +54,21 @@ public class MathUtil {
 
     public static double perimeter(double radius) {
         return radius * 2 * Math.PI;
+    }
+
+    public static double elapsedSeconds(long timestamp) {
+        return (double) (System.currentTimeMillis() - timestamp) / 1000;
+    }
+
+    public static double remainingSeconds(long timestamp, double duration) {
+        return duration - elapsedSeconds(timestamp);
+    }
+    public static boolean timeOver(long timestamp, double duration) {
+        return elapsedSeconds(timestamp) >= duration;
+    }
+
+    public static double evaluateFunction(String function, StaticVariableSet<Double> variableSet) {
+        return Genesis.getParser().evaluate(function,variableSet);
     }
 
 }

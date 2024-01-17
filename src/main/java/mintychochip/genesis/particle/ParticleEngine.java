@@ -85,7 +85,7 @@ public class ParticleEngine {
     public static double circleExpressionEvaluation(double radius, double time, String function) {
         StaticVariableSet<Double> variables = new StaticVariableSet<>();
         variables.set("i", time);
-        return radius * Genesis.getParser().evaluate(function, variables);
+        return radius * MathUtil.evaluateFunction(function,variables);
     }
 
     public static Vector calculateOffsetVector(ParticleShape shape, double time) {

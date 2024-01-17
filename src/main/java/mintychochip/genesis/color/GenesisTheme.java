@@ -66,4 +66,6 @@ public class GenesisTheme {
     public char getBullets() {
         return bullets;
     }
+
+
 }

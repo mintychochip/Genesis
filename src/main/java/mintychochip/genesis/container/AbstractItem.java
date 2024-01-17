@@ -14,9 +14,13 @@ public class AbstractItem {
     protected ItemMeta itemMeta;
 
     private final ItemStack itemStack;
-    public AbstractItem(JavaPlugin instance, Material material) {
+
+    private final boolean boundOnCraft;
+
+    public AbstractItem(JavaPlugin instance, Material material, boolean boundOnCraft) {
         this.instance = instance;
         itemStack = new ItemStack(material);
+        this.boundOnCraft = boundOnCraft;
         itemMeta = itemStack.getItemMeta();
     }
 
@@ -35,5 +39,9 @@ public class AbstractItem {
 
     public JavaPlugin getInstance() {
         return instance;
+    }
+
+    public boolean isBoundOnCraft() {
+        return boundOnCraft;
     }
 }

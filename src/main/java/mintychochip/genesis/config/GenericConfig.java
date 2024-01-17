@@ -6,28 +6,26 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class GenericConfig {
 
-    protected ConfigReader configReader;
-
-    protected ConfigurationSection main;
-
-    protected String path;
-
-    public GenericConfig(String fileName, JavaPlugin plugin) {
-        configReader = new ConfigReader(fileName,plugin);
+    protected final ConfigReader configReader;
+    protected final String path;
+    public GenericConfig(String path, JavaPlugin plugin) {
+        configReader = new ConfigReader(path,plugin);
+        this.path = path;
     }
 
-    public GenesisConfigurationSection getMain(String path) {
-        return new GenesisConfigurationSection(configReader.getConfigurationSection(path));
-    }
-
-    public ConfigurationSection getConfigurationSection(String path) {
-        return configReader.getConfigurationSection(path);
+    public GenesisConfigurationSection getMainConfigurationSection(String path) {
+        return new GenesisConfigurationSection(configReader.getConfigurationSection(path),path);
     }
 
     public String getPath() {
         return path;
+    }
+
+    public ConfigReader getConfigReader() {
+        return configReader;
     }
 }
