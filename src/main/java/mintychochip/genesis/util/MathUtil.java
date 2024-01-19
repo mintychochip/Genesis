@@ -5,26 +5,22 @@ import mintychochip.genesis.Genesis;
 import org.bukkit.Location;
 import org.bukkit.util.Vector;
 
-import javax.script.ScriptException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class MathUtil {
 
     private final Random random = new Random();
 
-    public Random getRandom() {
-        return random;
-    }
     public static boolean finishedDuration(double duration, long start) {
         long l = (System.currentTimeMillis() - start) / 1000;
         return l >= duration;
     }
+
     public static double roundToDecimals(double d, int c) {
         int temp = (int) (d * java.lang.Math.pow(10, c));
         return ((double) temp) / java.lang.Math.pow(10, c);
     }
+
     public static Vector rotateFunction(Vector v, double originalYaw, double originalPitch) {
         double v1 = originalPitch / 180.0 * Math.PI;
         double v2 = originalYaw / 180.0 * Math.PI;
@@ -32,6 +28,7 @@ public class MathUtil {
         v = rotateAboutY(v, -v2);
         return v;
     }
+
     public static Vector rotateFunction(Vector v, Location loc) {
         double yawR = loc.getYaw() / 180.0 * Math.PI;
         double pitchR = loc.getPitch() / 180.0 * Math.PI;
@@ -63,12 +60,17 @@ public class MathUtil {
     public static double remainingSeconds(long timestamp, double duration) {
         return duration - elapsedSeconds(timestamp);
     }
+
     public static boolean timeOver(long timestamp, double duration) {
         return elapsedSeconds(timestamp) >= duration;
     }
 
     public static double evaluateFunction(String function, StaticVariableSet<Double> variableSet) {
-        return Genesis.getParser().evaluate(function,variableSet);
+        return Genesis.getParser().evaluate(function, variableSet);
+    }
+
+    public Random getRandom() {
+        return random;
     }
 
 }

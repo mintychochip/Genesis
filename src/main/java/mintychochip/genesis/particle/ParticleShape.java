@@ -3,13 +3,9 @@ package mintychochip.genesis.particle;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.util.Vector;
 
-import org.yaml.snakeyaml.parser.ParserImpl;
+import java.util.List;
 
 public class ParticleShape { //allow polygons
 
@@ -25,8 +21,9 @@ public class ParticleShape { //allow polygons
     private ShapeMeta shapeMeta;
 
     public ParticleShape(GenesisShape shape, double maxRadius, double maxDistance, List<Particle> particleList, Entity boundEntity) {
-        this(shape,maxDistance,maxRadius,null,particleList, boundEntity);
+        this(shape, maxDistance, maxRadius, null, particleList, boundEntity);
     }
+
     public ParticleShape(GenesisShape shape, double maxRadius, double maxDistance, Vector offset, List<Particle> particleList, Entity boundEntity) {
         this.x = shape.getX();
         this.y = shape.getY();
@@ -41,9 +38,11 @@ public class ParticleShape { //allow polygons
                 .setLength(shape.getLength())
                 .setRotationSpeed(shape.getRotationSpeed());
     }
+
     public ParticleShape(GenesisShape shape, double maxRadius, double maxDistance, List<Particle> particleList, Location boundLocation) {
-        this(shape,maxRadius,maxDistance,null,particleList, boundLocation);
+        this(shape, maxRadius, maxDistance, null, particleList, boundLocation);
     }
+
     public ParticleShape(GenesisShape shape, double maxRadius, double maxDistance, Vector offset, List<Particle> particleList, Location boundLocation) {
         this.x = shape.getX();
         this.y = shape.getY();
@@ -96,16 +95,16 @@ public class ParticleShape { //allow polygons
         this.boundLocation = boundLocation;
     }
 
-    public void setShapeMeta(ShapeMeta shapeMeta) {
-        this.shapeMeta = shapeMeta;
-    }
-
     public double getMaxRadius() {
         return maxRadius;
     }
 
     public ShapeMeta getShapeMeta() {
         return shapeMeta;
+    }
+
+    public void setShapeMeta(ShapeMeta shapeMeta) {
+        this.shapeMeta = shapeMeta;
     }
 
     public double getMaxDistance() {

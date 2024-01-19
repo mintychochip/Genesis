@@ -4,10 +4,6 @@ import org.bukkit.ChatColor;
 
 public class GenesisColor {
 
-    enum Colors {
-
-    }
-
     public static String applyColor(char theme, char color, String text) {
         return applyColor(ChatColor.getByChar(theme), ChatColor.getByChar(color), text);
     }
@@ -17,5 +13,9 @@ public class GenesisColor {
             return color + text;
         }
         return theme + text;
+    }
+
+    enum Colors {
+
     }
 }

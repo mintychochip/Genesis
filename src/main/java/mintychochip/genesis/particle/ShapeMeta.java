@@ -1,7 +1,9 @@
 package mintychochip.genesis.particle;
+
+import org.bukkit.util.Vector;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.bukkit.util.Vector;
 
 public class ShapeMeta {
 
@@ -14,20 +16,23 @@ public class ShapeMeta {
     private double degreesRotated = 0;
 
     public ShapeMeta addRotationAxis(double x, double y, double z) {
-        addRotationAxis(new Vector(x,y,z));
+        addRotationAxis(new Vector(x, y, z));
         return this;
     }
+
     public ShapeMeta incrementRadius() {
         radius += radiusIncrement;
         return this;
     }
+
     public ShapeMeta addRotationAxis(Vector vector) {
-        if(rotationAxes == null) {
+        if (rotationAxes == null) {
             rotationAxes = new ArrayList<>();
         }
         rotationAxes.add(vector);
         return this;
     }
+
     public double getRadiusIncrement() {
         return radiusIncrement;
     }

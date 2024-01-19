@@ -7,7 +7,8 @@ import java.util.List;
 
 public class GenesisPlayerManager {
 
-    private List<GenesisPlayer> genesisPlayerList = new ArrayList<>();
+    private final List<GenesisPlayer> genesisPlayerList = new ArrayList<>();
+
     public List<GenesisPlayer> getGenesisPlayerList() {
         return genesisPlayerList;
     }

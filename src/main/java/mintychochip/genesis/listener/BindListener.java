@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -24,30 +23,32 @@ public class BindListener implements Listener {
         UUID user = event.getPlayer().getUniqueId();
         UUID uuidFromMainHand = getUUIDFromItemStack(inventory.getItemInMainHand());
         UUID uuidFromOffHand = getUUIDFromItemStack(inventory.getItemInOffHand());
-        if(!user.equals(uuidFromMainHand) && uuidFromMainHand != null) {
-            closeInventory(event.getPlayer(),uuidFromMainHand);
+        if (!user.equals(uuidFromMainHand) && uuidFromMainHand != null) {
+            closeInventory(event.getPlayer(), uuidFromMainHand);
             event.setCancelled(true);
             return;
         }
-        if(!user.equals(uuidFromOffHand)) {
-            closeInventory(event.getPlayer(),uuidFromOffHand);
+        if (!user.equals(uuidFromOffHand)) {
+            closeInventory(event.getPlayer(), uuidFromOffHand);
             event.setCancelled(true);
         }
     }
+
     public void closeInventory(Player player, UUID uuid) {
         Bukkit.broadcastMessage(ChatColor.RED + "This book is bound to: " + uuid.toString());
         player.closeInventory();
     }
+
     public UUID getUUIDFromItemStack(ItemStack itemStack) {
-        if(itemStack.getType() == Material.AIR) {
+        if (itemStack.getType() == Material.AIR) {
             return null;
         }
         ItemMeta itemMeta = itemStack.getItemMeta();
-        if(itemMeta == null) {
+        if (itemMeta == null) {
             return null;
         }
-        String owner = itemStack.getItemMeta().getPersistentDataContainer().get(Genesis.getKey("player"),PersistentDataType.STRING);
-        if(owner == null) {
+        String owner = itemStack.getItemMeta().getPersistentDataContainer().get(Genesis.getKey("player"), PersistentDataType.STRING);
+        if (owner == null) {
             return null;
         }
         Player player = Bukkit.getPlayer(owner);

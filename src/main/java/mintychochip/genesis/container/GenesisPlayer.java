@@ -12,5 +12,5 @@ public class GenesisPlayer {
     private PlayerSettings playerSettings;
     private boolean fallOnLeaves;
 
-    private List<GenesisHandler> playerHandlers = new ArrayList<>();
+    private final List<GenesisHandler> playerHandlers = new ArrayList<>();
 }

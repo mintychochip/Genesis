@@ -9,11 +9,10 @@ import java.io.File;
 public class ConfigReader {
 
     private final String fileName;
+    private final JavaPlugin plugin;
     private String currentPath;
     private File file;
     private YamlConfiguration config;
-
-    private final JavaPlugin plugin;
 
     public ConfigReader(String fileName, JavaPlugin plugin) {
         this.fileName = fileName;

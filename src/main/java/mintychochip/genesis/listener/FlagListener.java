@@ -1,27 +1,27 @@
 package mintychochip.genesis.listener;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.entity.Player;
 
 public class FlagListener implements Listener {
 
-    private double fallDamageCoefficient = 0.5;
+    private final double fallDamageCoefficient = 0.5;
 
-    private double flatRange = 2;
-    private double vertRange = 1;
+    private final double flatRange = 2;
+    private final double vertRange = 1;
 
     @EventHandler
     public void onPlayerFallOnLeaves(final EntityDamageEvent event) {
-        if(!(event.getEntity() instanceof Player player)) {
+        if (!(event.getEntity() instanceof Player player)) {
             return;
         }
-        if(event.getDamage() == 0) {
+        if (event.getDamage() == 0) {
             return;
         }
-        if(event.getCause() != EntityDamageEvent.DamageCause.FALL) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) {
             return;
         }
         double damage = event.getDamage() * fallDamageCoefficient;
@@ -29,8 +29,8 @@ public class FlagListener implements Listener {
         for (double i = -vertRange; i <= vertRange; i++) {
             for (double j = -flatRange; j <= flatRange; j++) {
                 for (double k = -flatRange; k <= flatRange; k++) {
-                    if(location.add(i,j,k).getBlock().getType().toString().contains("LEAVES")) {
-                        if(player.getHealth() == 1) {
+                    if (location.add(i, j, k).getBlock().getType().toString().contains("LEAVES")) {
+                        if (player.getHealth() == 1) {
                             event.setDamage(0);
                         } else if (damage > player.getHealth()) {
                             event.setDamage(player.getHealth() - 1);
@@ -39,7 +39,7 @@ public class FlagListener implements Listener {
                         }
                         return;
                     }
-                    location.subtract(i,j,k);
+                    location.subtract(i, j, k);
                 }
             }
         }
