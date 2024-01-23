@@ -4,8 +4,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.jetbrains.annotations.NotNull;
-
 public class GenesisCraftEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
@@ -30,7 +28,6 @@ public class GenesisCraftEvent extends Event {
         return result;
     }
 
-    @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;

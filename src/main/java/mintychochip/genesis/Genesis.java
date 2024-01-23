@@ -41,8 +41,6 @@ public final class Genesis extends JavaPlugin {
     private static final Map<Player, List<BukkitTask>> currentTasks = new HashMap<>();
     private static final RecipeRegistry itemManager = new RecipeRegistry();
     private static final List<CraftingRecipe> recipes = new ArrayList<>();
-    private static ConfigMarker configMarker;
-
     public static GenesisConfig getGenesisConfig() {
         return genesisConfig;
     }
@@ -61,10 +59,6 @@ public final class Genesis extends JavaPlugin {
 
     public static Genesis getInstance() {
         return instance;
-    }
-
-    public static ConfigMarker getConfigMarker() {
-        return configMarker;
     }
 
     public static Keys getKeys() {
@@ -89,7 +83,6 @@ public final class Genesis extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        configMarker = new ConfigMarker();
         mathUtil = new MathUtil();
         instance = this;
         keys = new Keys();
@@ -100,6 +93,7 @@ public final class Genesis extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new FlagListener(), this);
         Bukkit.getPluginManager().registerEvents(new BindListener(), this);
         keys.generateKeys(this, genesisConfig);
+        getCommand("mappings").setExecutor(new MappingCommand());
     }
 
     @Override

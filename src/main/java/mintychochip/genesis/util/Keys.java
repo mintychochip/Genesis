@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Keys {
-    private final ConfigMarker configMarker = Genesis.getConfigMarker();
     private final Map<String, NamespacedKey> keys = new HashMap();
 
     @Deprecated
@@ -24,7 +23,7 @@ public class Keys {
     }
 
     public void generateKeys(JavaPlugin plugin, GenericConfig config) {
-        generateKeys(plugin, config.getMainConfigurationSection(configMarker.global_settings).getStringList(configMarker.keys));
+        generateKeys(plugin, config.getMainConfigurationSection(ConfigMarker.global_settings).getStringList(ConfigMarker.keys));
     }
 
     public void generateKeys(JavaPlugin plugin, List<String> keys) {

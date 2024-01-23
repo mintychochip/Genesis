@@ -23,7 +23,10 @@ public class BindListener implements Listener {
         UUID user = event.getPlayer().getUniqueId();
         UUID uuidFromMainHand = getUUIDFromItemStack(inventory.getItemInMainHand());
         UUID uuidFromOffHand = getUUIDFromItemStack(inventory.getItemInOffHand());
-        if (!user.equals(uuidFromMainHand) && uuidFromMainHand != null) {
+        if(uuidFromMainHand == null || uuidFromOffHand == null) {
+            return;
+        }
+        if (!user.equals(uuidFromMainHand)) {
             closeInventory(event.getPlayer(), uuidFromMainHand);
             event.setCancelled(true);
             return;

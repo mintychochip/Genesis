@@ -6,7 +6,11 @@ themes: #Themes are 5 characters in length, if less than 5 characters are inpute
 recipes:
   greater_tome:
     shaped_recipe: false
-    shape: ["EEE","EEE","EEE"]
     ingredients:
       feather: 2
       phoenix_feather: 2
+  lesser_tome:
+    shaped_recipe: false
+    ingredients:
+      ice_tear: 1
+      writable_book: 1

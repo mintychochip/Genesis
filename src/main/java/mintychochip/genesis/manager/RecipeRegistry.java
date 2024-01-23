@@ -51,13 +51,13 @@ public class RecipeRegistry {
                 throw new IOException("item meta cannot be null!");
             }
             NamespacedKey obfuscatedKey = new NamespacedKey(instance, convertStringToKeyable(itemMeta.getDisplayName()));
-            mappings.put(item, obfuscatedKey);
+            mappings.put(convertStringToKeyable(item), obfuscatedKey);
             values.put(obfuscatedKey, itemStack);
         }
     }
 
     public String convertStringToKeyable(String text) {
-        return ChatColor.stripColor(text.strip().replace(" ", "_").toLowerCase().replace("'", ""));
+        return ChatColor.stripColor(text.strip().replace("-","_").replace(" ", "_").toLowerCase().replace("'", ""));
     }
 
     public ItemStack getRecipeItemFromString(String item) {

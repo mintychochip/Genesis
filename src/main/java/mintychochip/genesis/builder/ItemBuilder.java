@@ -33,23 +33,31 @@ public class ItemBuilder {
     }
 
     public ItemBuilder setRawDisplayName(String name) {
+        if(name == null) {
+            return this;
+        }
         abstractItem.getItemMeta().setDisplayName(name);
         return this;
     }
 
     public ItemBuilder setDisplayName(String name, char color) {
+        if(name == null) {
+            return this;
+        }
         abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(genesisTheme.getHeaderColor(), color, name));
         return this;
     }
 
     public ItemBuilder setDisplayName(String name, ChatColor chatColor) {
-        if (chatColor == null) {
-            abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(ChatColor.getByChar(genesisTheme.getHeaderColor()), null, name));
-            return this;
-        } else {
-            abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(genesisTheme.getHeaderColor(), chatColor.getChar(), name));
+        if(name == null) {
             return this;
         }
+        if (chatColor == null) {
+            abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(ChatColor.getByChar(genesisTheme.getHeaderColor()), null, name));
+        } else {
+            abstractItem.getItemMeta().setDisplayName(GenesisColor.applyColor(genesisTheme.getHeaderColor(), chatColor.getChar(), name));
+        }
+        return this;
     }
 
     public ItemBuilder addBulletedLore(String term, String text) {
@@ -58,12 +66,18 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addBulletedLore(String term, String text, ChatColor color) {
+        if(term == null || text == null) {
+            return this;
+        }
         lore.add(String.format("%s %s %s", ChatColor.getByChar(genesisTheme.getBullets()) + "*", ChatColor.getByChar(genesisTheme.getAccents()) + term, ChatColor.getByChar(genesisTheme.getSecondaryHeaderColor()) + text));
         abstractItem.getItemMeta().setLore(lore);
         return this;
     }
 
     public ItemBuilder addLore(List<String> text) { //adds the default can add compatability for custom color
+        if(text == null) {
+            return this;
+        }
         if (lore == null) {
             lore = new ArrayList<>();
         }
@@ -75,6 +89,9 @@ public class ItemBuilder {
     }
 
     public ItemBuilder addLore(String text) {
+        if(text == null) {
+            return this;
+        }
         if (lore == null) {
             lore = new ArrayList<>();
         }

@@ -1,0 +1,13 @@
+craftable-items:
+  steel-ingot:
+    display-name: "Steel Ingot"
+    material: IRON_INGOT
+    lore:
+      - asd
+    rarity: UNCOMMON
+    custom-model: 1
+    recipe:
+      shaped-recipe: false
+      ingredients:
+      mcmmo-requirements:
+        MINING: 50
