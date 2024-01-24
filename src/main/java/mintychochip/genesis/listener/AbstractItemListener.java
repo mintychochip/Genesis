@@ -79,7 +79,7 @@ public class AbstractItemListener implements Listener {
     @EventHandler
     public void onFurnaceStartSmelt(final FurnaceStartSmeltEvent event) {
         ItemStack result = event.getRecipe().getInput();
-
+    }
     public void onInventoryMoveAbstractItemIntoFurnace(final InventoryMoveItemEvent event) {
         ItemStack item = event.getItem();
         if(!(event.getDestination().getType() == InventoryType.FURNACE)) {

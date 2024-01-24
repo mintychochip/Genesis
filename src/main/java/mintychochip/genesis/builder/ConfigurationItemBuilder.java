@@ -4,6 +4,7 @@ import mintychochip.genesis.config.GenesisConfigurationSection;
 import mintychochip.genesis.container.AbstractItem;
 import mintychochip.genesis.util.ConfigMarker;
 import mintychochip.genesis.util.Rarity;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -34,8 +35,11 @@ public class ConfigurationItemBuilder extends ItemBuilder {
     public ConfigurationItemBuilder addLore(List<String> text) {
         return (ConfigurationItemBuilder) super.addLore(text);
     }
+    public ConfigurationItemBuilder addLore(String text) {
+        return (ConfigurationItemBuilder) super.addLore(text);
+    }
     public ConfigurationItemBuilder defaultBuilder() {
-        return this.setDisplayName(main.getString(ConfigMarker.display_name),main.enumFromSection(Rarity.class,ConfigMarker.rarity).getColorCode())
+        return this.setDisplayName(main.getString(ConfigMarker.display_name),main.enumFromSection(Rarity.class, ConfigMarker.rarity).getColorCode())
                 .setCustomModelData(main.getInt(ConfigMarker.custom_model))
                 .setUnbreakable(main.getBoolean(ConfigMarker.unbreakable))
                 .addLore(main.getStringList(ConfigMarker.lore));

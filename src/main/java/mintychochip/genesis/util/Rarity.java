@@ -1,5 +1,7 @@
 package mintychochip.genesis.util;
 
+import org.bukkit.ChatColor;
+
 public enum Rarity {
     COMMON('7'),
     UNCOMMON('a'),
@@ -17,6 +19,10 @@ public enum Rarity {
 
     public char getColorCode() {
         return colorCode;
+    }
+
+    public ChatColor getChatColorCode() {
+        return ChatColor.getByChar(colorCode);
     }
 
 }
