@@ -93,7 +93,6 @@ public final class Genesis extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new FlagListener(), this);
         Bukkit.getPluginManager().registerEvents(new BindListener(), this);
         keys.generateKeys(this, genesisConfig);
-        getCommand("mappings").setExecutor(new MappingCommand());
     }
 
     @Override
