@@ -131,4 +131,13 @@ public class ItemBuilder {
         }
         return color + text;
     }
+
+    public ItemBuilder setAbstractItem(AbstractItem abstractItem) {
+        this.abstractItem = abstractItem;
+        return this;
+    }
+
+    public AbstractItem getAbstractItem() {
+        return abstractItem;
+    }
 }
