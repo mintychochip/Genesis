@@ -2,15 +2,71 @@ global-settings:
   enable-item-display-names: true
   genesis-keys: [ unstackable, abstractItem, abstract, bind ]
 themes: #Themes are 5 characters in length, if less than 5 characters are inputed
-    CLASSIC: "768e6"
-recipes:
-  greater_tome:
-    shaped_recipe: false
+  CLASSIC: "768e6"
+drop-table: #drop-table, takes sections of generic entity types, with sub-sections of cached custom items, materials haven't been added and double values of drop chances
+  ZOMBIE:
+    phoenix_feather:
+      drop-rate: 0.2
+      min-count: 1
+      max-count: 3
+crafting-recipes:
+  legendary_tome:
+    shaped-recipe: false
+    shape: ["EEE","EEE","EEE"]
     ingredients:
-      feather: 2
-      phoenix_feather: 2
-  lesser_tome:
-    shaped_recipe: false
+      feather: 1
+      phoenix_feather: 1
+  ice_tear:
+    shaped-recipe: true
+    shape: ["EFE","ABA","EFE"]
     ingredients:
-      ice_tear: 1
-      writable_book: 1
+      ghast_tear: B
+      blue_ice: A
+      nether_star: E
+      snow_block: F
+  poor_tome:
+    shaped-recipe: true
+    shape: ["EFE","EFE","EEE"]
+    ingredients:
+      feather: E
+      air: F
+  dirt:
+    shaped-recipe: true
+    shape: [ "FEE","FEE"]
+    ingredients:
+      oak_sapling: F
+      cobweb: E
+  phoenix_feather:
+    shaped-recipe: true
+    shape: ["AAA","ABA","AAA"]
+    ingredients:
+      feather: B
+      blaze_powder: A
+  slime:
+    shaped-recipe: false
+    ingredients:
+      slime_ball: 1
+  iron_leggings:
+    shaped-recipe: true
+    shape: ["EFE","EFE","EEE"]
+    ingredients:
+      steel_ingot: E
+      air: F
+smelting-recipes:
+  steel_ingot:
+    cooking-xp: 50
+    cooking-time: 200
+    ingredients:
+      smelting-material: IRON_INGOT
+  milk_bucket:
+    cooking-xp: 2
+    cooking-time: 20
+    ingredients:
+      smelting-material: COBWEB
+
+
+
+
+
+
+

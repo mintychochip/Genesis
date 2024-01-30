@@ -2,14 +2,16 @@ package mintychochip.genesis.config;
 
 import mintychochip.genesis.Genesis;
 import mintychochip.genesis.color.GenesisTheme;
+import mintychochip.genesis.config.abstraction.GenericConfig;
+import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
+import mintychochip.genesis.container.GenesisDropTableEntry;
 import mintychochip.genesis.util.EnumUtil;
 import mintychochip.genesis.util.GenesisConfigMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Furnace;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -17,7 +19,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -30,7 +31,6 @@ public class GenesisConfig extends GenericConfig {
     public Set<String> ingredientsKeys;
 
     private final Set<NamespacedKey> customRecipes = new HashSet<>();
-
     public GenesisConfig(String fileName, JavaPlugin plugin) {
         super(fileName, plugin);
         if (!loadThemes()) {
@@ -51,19 +51,22 @@ public class GenesisConfig extends GenericConfig {
         if (Genesis.getItemManager().resultMappingContainsKey(key)) {
             return Genesis.getItemManager().getResultKeyFromString(key);
         }
-        return new NamespacedKey(plugin,key);
+        return new NamespacedKey(plugin, key);
     }
+
+
     private ItemStack getCraftingResult(String key) {
-        if(Genesis.getItemManager().resultMappingContainsKey(key)) {
+        if (Genesis.getItemManager().resultMappingContainsKey(key)) {
             return Genesis.getItemManager().getResultItemFromString(key);
         }
-        return new ItemStack(Enum.valueOf(Material.class,key.toUpperCase()));
+        return new ItemStack(Enum.valueOf(Material.class, key.toUpperCase()));
     }
+
     private boolean smeltingRecipes() throws IOException {
         GenesisConfigurationSection smeltingRecipes = getMainConfigurationSection(GenesisConfigMarker.smelting_recipes);
         for (String key : smeltingRecipes.getKeys(false)) {
             ItemStack result = getCraftingResult(key);
-            NamespacedKey namespacedKey = getCraftingResultKey(Genesis.getInstance(),key);
+            NamespacedKey namespacedKey = getCraftingResultKey(Genesis.getInstance(), key);
             boolean a = Genesis.getItemManager().resultMappingContainsKey(key);
             boolean b = EnumUtil.isInEnum(Material.class, key.toUpperCase());
             if (!a && !b) {

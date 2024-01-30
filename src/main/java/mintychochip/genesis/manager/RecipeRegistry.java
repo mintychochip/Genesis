@@ -50,7 +50,7 @@ public class RecipeRegistry {
             if (itemMeta == null) {
                 throw new IOException("item meta cannot be null!");
             }
-            NamespacedKey obfuscatedKey = new NamespacedKey(instance, convertStringToKeyable(itemMeta.getDisplayName()));
+            NamespacedKey obfuscatedKey = new NamespacedKey(instance, convertStringToKeyable(item));
             mappings.put(convertStringToKeyable(item), obfuscatedKey);
             values.put(obfuscatedKey, itemStack);
         }
@@ -98,6 +98,9 @@ public class RecipeRegistry {
 
     public boolean itemMappingContainsKey(String key) {
         return itemMappings.containsKey(key);
+    }
+    public boolean itemsContainsKey(NamespacedKey key) {
+        return recipeItems.containsKey(key);
     }
 
 }

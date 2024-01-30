@@ -1,4 +1,4 @@
-package mintychochip.genesis.config;
+package mintychochip.genesis.config.abstraction;
 
 import mintychochip.genesis.util.EnumUtil;
 import org.bukkit.configuration.ConfigurationSection;

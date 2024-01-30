@@ -1,0 +1,15 @@
+drop-table: #drop-table, takes sections of generic entity types, with sub-sections of cached custom items, materials haven't been added and double values of drop chances
+  CHICKEN:
+    phoenix_feather:
+      drop-rate: 0.01
+      min-count: 1
+      max-count: 2
+      looting: true
+      player-required: true
+  ZOMBIE:
+    phoenix_feather:
+      drop-rate: 0.5
+      min-count: 1
+      max-count: 3
+      looting: true
+      player-required: true

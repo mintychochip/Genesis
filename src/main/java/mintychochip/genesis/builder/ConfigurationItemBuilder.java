@@ -1,15 +1,13 @@
 package mintychochip.genesis.builder;
 
-import mintychochip.genesis.config.GenesisConfigurationSection;
+import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import mintychochip.genesis.container.AbstractItem;
 import mintychochip.genesis.util.ConfigMarker;
 import mintychochip.genesis.util.Rarity;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.lang.module.Configuration;
 import java.util.List;
 
 public class ConfigurationItemBuilder extends ItemBuilder {

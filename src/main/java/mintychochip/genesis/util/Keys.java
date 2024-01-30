@@ -1,7 +1,6 @@
 package mintychochip.genesis.util;
 
-import mintychochip.genesis.Genesis;
-import mintychochip.genesis.config.GenericConfig;
+import mintychochip.genesis.config.abstraction.GenericConfig;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

@@ -12,7 +12,7 @@ public class AbstractItem {
     protected ItemMeta itemMeta;
 
     public AbstractItem(JavaPlugin instance, Material material) {
-        this(instance, material, true);
+        this(instance, material, false);
     }
 
     public AbstractItem(JavaPlugin instance, Material material, boolean boundOnCraft) {

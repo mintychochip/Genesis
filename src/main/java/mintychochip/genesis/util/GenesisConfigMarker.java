@@ -14,4 +14,15 @@ public class GenesisConfigMarker extends ConfigMarker {
     public static String cookingXp = "cooking-xp";
 
     public static String cookingTime = "cooking-time";
+
+    //USAGE IN GENESIS CONFIG, "DROP TABLES"
+    public static String drop_rate = "drop-rate";
+    public static String min_count = "min-count";
+    public static String max_count = "max-count";
+    public static String looting_applicable = "looting";
+    public static String player_kill = "player-required";
+
+    public static String originator = "origin";
+
+    public static String inherits = "inherits";
 }

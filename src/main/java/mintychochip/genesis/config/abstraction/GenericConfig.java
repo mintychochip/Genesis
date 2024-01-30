@@ -1,13 +1,12 @@
-package mintychochip.genesis.config;
+package mintychochip.genesis.config.abstraction;
 
+import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import mintychochip.genesis.util.ConfigReader;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class GenericConfig {
-
     protected final ConfigReader configReader;
     protected final String path;
-
     public GenericConfig(String path, JavaPlugin plugin) {
         configReader = new ConfigReader(path, plugin);
         this.path = path;

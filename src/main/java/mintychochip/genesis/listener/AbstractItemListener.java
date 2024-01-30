@@ -42,7 +42,6 @@ public class AbstractItemListener implements Listener {
         if (itemMeta == null) {
             return;
         }
-
         if (itemMeta.getPersistentDataContainer().has(Genesis.getKey("abstract"), PersistentDataType.BOOLEAN)) {
             itemDrop.setCustomName(itemMeta.getDisplayName());
             itemDrop.setCustomNameVisible(true);
@@ -51,7 +50,7 @@ public class AbstractItemListener implements Listener {
 
     @EventHandler //thonking
     public void preventAbstractItemCraft(final PrepareItemCraftEvent event) {
-        Set<NamespacedKey> customRecipes = Genesis.getGenesisConfig().getCustomRecipes();
+        Set<NamespacedKey> customRecipes = Genesis.getGenesisConfigManager().getGenesisConfig().getCustomRecipes();
         if (event.getRecipe() instanceof Keyed keyed) {
             if (customRecipes.contains(keyed.getKey())) {
                 return;

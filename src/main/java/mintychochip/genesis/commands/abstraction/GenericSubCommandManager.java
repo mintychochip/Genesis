@@ -8,14 +8,14 @@ public class GenericSubCommandManager extends GenericCommandManager implements S
         super(executor, description, depth);
     } //instance, ollivanders (1) books (2) set
     @Override
-    public boolean execute(String[] args, Player sender) {
-        if(args.length < depth) {
+    public boolean execute(String[] strings, Player sender) {
+        if(strings.length < depth) {
             return false;
         }
         for (SubCommand subCommand : subCommands) {
             if(subCommand instanceof GenericCommandObject gco) {
-                if(gco.getExecutor().equals(args[depth - 1])) {
-                    return subCommand.execute(args,sender);
+                if(gco.getExecutor().equals(strings[depth - 1])) {
+                    return subCommand.execute(strings,sender);
                 }
             }
         }

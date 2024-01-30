@@ -2,20 +2,22 @@ package mintychochip.genesis;
 
 import com.fathzer.soft.javaluator.DoubleEvaluator;
 import mintychochip.genesis.config.GenesisConfig;
+import mintychochip.genesis.config.GenesisRegistry;
 import mintychochip.genesis.listener.AbstractItemListener;
 import mintychochip.genesis.listener.BindListener;
+import mintychochip.genesis.listener.EntityDeathListener;
 import mintychochip.genesis.listener.FlagListener;
+import mintychochip.genesis.manager.GenesisConfigManager;
 import mintychochip.genesis.manager.GenesisPlayerManager;
 import mintychochip.genesis.manager.RecipeRegistry;
 import mintychochip.genesis.particle.ParticleEngine;
-import mintychochip.genesis.util.ConfigMarker;
 import mintychochip.genesis.util.Keys;
 import mintychochip.genesis.util.MathUtil;
-import mintychochip.genesis.util.StripLog;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.CraftingRecipe;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -37,13 +39,10 @@ public final class Genesis extends JavaPlugin {
     private static ParticleEngine particleEngine;
 
     private static final int id = 0;
-    private static GenesisConfig genesisConfig;
+
     private static final Map<Player, List<BukkitTask>> currentTasks = new HashMap<>();
     private static final RecipeRegistry itemManager = new RecipeRegistry();
     private static final List<CraftingRecipe> recipes = new ArrayList<>();
-    public static GenesisConfig getGenesisConfig() {
-        return genesisConfig;
-    }
 
     public static RecipeRegistry getItemManager() {
         return itemManager;
@@ -81,18 +80,29 @@ public final class Genesis extends JavaPlugin {
         return Genesis.getKeys().getMap().get(key);
     }
 
+    private static GenesisConfigManager genesisConfigManager;
+
+    public static GenesisConfigManager getGenesisConfigManager() {
+        return genesisConfigManager;
+    }
+
     @Override
     public void onEnable() {
         mathUtil = new MathUtil();
         instance = this;
         keys = new Keys();
+        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+            GenesisRegistry.getLoadedPlugins().put(plugin.getName().toLowerCase(),plugin);
+        }
+
         genesisPlayerManager = new GenesisPlayerManager();
-        genesisConfig = new GenesisConfig("genesis.yml", this);
         parser = new DoubleEvaluator();
+        genesisConfigManager = new GenesisConfigManager(this);
         Bukkit.getPluginManager().registerEvents(new AbstractItemListener(), this);
         Bukkit.getPluginManager().registerEvents(new FlagListener(), this);
         Bukkit.getPluginManager().registerEvents(new BindListener(), this);
-        keys.generateKeys(this, genesisConfig);
+        Bukkit.getPluginManager().registerEvents(new EntityDeathListener(), this);
+        keys.generateKeys(this, genesisConfigManager.getGenesisConfig());
         getCommand("mappings").setExecutor(new MappingCommand());
     }
 
