@@ -5,27 +5,23 @@ import mintychochip.genesis.config.abstraction.GenericConfig;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import mintychochip.genesis.container.DropTableSettings;
 import mintychochip.genesis.container.GenesisDropTableEntry;
-import mintychochip.genesis.manager.GenesisConfigManager;
 import mintychochip.genesis.util.EnumUtil;
 import mintychochip.genesis.util.GenesisConfigMarker;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class DropTableConfig extends GenericConfig {
 
     private final GenesisConfigurationSection dropTableSection = getMainConfigurationSection("drop-table");
     private final GenesisConfigurationSection defaults = getMainConfigurationSection("default.settings");
     private final DropTableSettings defaultSettings = generateDropTableSettings(defaults);
+
     public DropTableConfig(String path, JavaPlugin plugin) {
         super(path, plugin);
         new BukkitRunnable() {
@@ -57,22 +53,30 @@ public class DropTableConfig extends GenericConfig {
                     }
                     DropTableSettings tableSettings = new DropTableSettings().copy(defaultSettings);
                     ItemStack itemStackFromKey = getItemStackFromKey(dropTableKey, javaPlugin);
-                    String inherits = itemSection.getString(GenesisConfigMarker.inherits);
-                    if (inherits != null) {
-                        DropTableSettings dropTableSettings = generateDropTableSettings(dropTableSection.getConfigurationSection(inherits));
-                        tableSettings.copy(dropTableSettings);
+                    if (itemStackFromKey == null) {
+                        return false;
                     }
-                    GenesisConfigurationSection settings = itemSection.getConfigurationSection("settings");
-                    if(settings != null) {
-                        DropTableSettings dropTableSettings = generateDropTableSettings(settings);
-                        tableSettings.copy(dropTableSettings);
+
+                    String inherits = itemSection.getString(GenesisConfigMarker.inherits); //indirect check in copySettingsFromSection
+
+                    if (copySettingsFromSection(itemSection.getConfigurationSection("settings"), tableSettings) && copySettingsFromSection(dropTableSection.getConfigurationSection(inherits), tableSettings)) {
+                        GenesisRegistry.addDropTableEntry(entityType, new GenesisDropTableEntry(itemStackFromKey, tableSettings));
                     }
-                    GenesisRegistry.addDropTableEntry(entityType, new GenesisDropTableEntry(itemStackFromKey,tableSettings));
                 }
             }
         }
         return true;
     }
+
+    public boolean copySettingsFromSection(GenesisConfigurationSection section, DropTableSettings to) {
+        if (section == null) {
+            return false;
+        }
+        DropTableSettings dropTableSettings = generateDropTableSettings(section);
+        to.copy(dropTableSettings);
+        return true;
+    }
+
     public DropTableSettings generateDropTableSettings(GenesisConfigurationSection settings) {
         return new DropTableSettings(settings.getDouble(GenesisConfigMarker.drop_rate),
                 settings.getInt(GenesisConfigMarker.min_count),

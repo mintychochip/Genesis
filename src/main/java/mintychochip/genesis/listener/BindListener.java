@@ -38,7 +38,7 @@ public class BindListener implements Listener {
     }
 
     public void closeInventory(Player player, UUID uuid) {
-        Bukkit.broadcastMessage(ChatColor.RED + "This book is bound to: " + uuid.toString());
+        Bukkit.broadcastMessage(ChatColor.RED + "This book is item to: " + uuid.toString());
         player.closeInventory();
     }
 
