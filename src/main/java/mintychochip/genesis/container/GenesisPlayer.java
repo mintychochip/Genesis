@@ -10,7 +10,4 @@ public class GenesisPlayer {
 
     private Player player;
     private PlayerSettings playerSettings;
-    private boolean fallOnLeaves;
-
-    private final List<GenesisHandler> playerHandlers = new ArrayList<>();
 }

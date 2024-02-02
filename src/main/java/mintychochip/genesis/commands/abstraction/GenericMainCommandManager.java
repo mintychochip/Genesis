@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenericMainCommandManager extends GenericCommandManager implements CommandExecutor,TabCompleter {
+
     public GenericMainCommandManager(String executor, String description) {
         super(executor, description);
+        preceding = executor;
     } //command managers at 0
 
     @Override
@@ -23,11 +25,17 @@ public class GenericMainCommandManager extends GenericCommandManager implements 
         if (strings.length < depth) {
             return false;
         }
-        if (commandSender instanceof Player player) {
+        if (commandSender instanceof Player sender) {
             for (SubCommand subCommand : subCommands) {
                 if (subCommand instanceof GenericCommandObject gco) {
                     if (gco.getExecutor().equalsIgnoreCase(strings[depth - 1])) {
-                        subCommand.execute(strings, player);
+                        if(subCommand.execute(strings,sender)) {
+                            return true;
+                        }
+                        for (String string : menu) {
+                            sender.sendMessage(string);
+                        }
+                        return false;
                     }
                 }
             }

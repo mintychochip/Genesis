@@ -7,12 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
 public class FlagListener implements Listener {
-
     private final double fallDamageCoefficient = 0.5;
-
     private final double flatRange = 2;
     private final double vertRange = 1;
-
     @EventHandler
     public void onPlayerFallOnLeaves(final EntityDamageEvent event) {
         if (!(event.getEntity() instanceof Player player)) {

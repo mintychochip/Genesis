@@ -27,8 +27,8 @@ public class EntityDeathListener implements Listener {
                 Random random = Genesis.getMath().getRandom();
                 DropTableSettings dropTableSettings = genesisDropTableEntry.getDropTableSettings();
                 Bukkit.broadcastMessage(dropTableSettings.toString());
-                int count = random.nextInt(dropTableSettings.getMinCount(), dropTableSettings.getMaxCount());
-                double dropChance = random.nextDouble(0, 1);
+                int count = random.nextInt(dropTableSettings.getMaxCount() - dropTableSettings.getMinCount()) + dropTableSettings.getMinCount();
+                double dropChance = random.nextDouble();
                 if (dropChance < dropTableSettings.getDropRate()) {
                     World world = event.getEntity().getLocation().getWorld();
                     itemStack.setAmount(count);

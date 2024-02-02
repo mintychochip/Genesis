@@ -1,10 +1,9 @@
 package mintychochip.genesis.commands.abstraction;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,15 +12,15 @@ import java.util.Map;
 
 public class GenericCommandManager extends GenericCommandObject { //command managers at 0
     protected List<SubCommand> subCommands = new ArrayList<>();
-
-    protected Map<String,GenericSubCommandManager> subCommandManagers = new HashMap<>();
+    protected List<String> menu = new ArrayList<>();
+    protected Map<String, GenericSubCommandManager> subCommandManagers = new HashMap<>();
+    protected String preceding; //contains the preceding string at given depth can probably deprecate depth after using this
 
     public GenericCommandManager(String executor, String description, int depth) {
         super(executor, description, depth);
     }
-
     public GenericCommandManager(String executor, String description) {
-        super(executor, description);
+        this(executor, description, 1);
     }
 
     public boolean hasCorrectDepth(String[] strings) {
@@ -42,8 +41,8 @@ public class GenericCommandManager extends GenericCommandObject { //command mana
 
     public boolean isASubCommand(String command) {
         for (SubCommand subCommand : subCommands) {
-            if(subCommand instanceof GenericCommandObject gco) {
-                if(gco.getExecutor().equalsIgnoreCase(command)) {
+            if (subCommand instanceof GenericCommandObject gco) {
+                if (gco.getExecutor().equalsIgnoreCase(command)) {
                     return true;
                 }
             }
@@ -52,11 +51,9 @@ public class GenericCommandManager extends GenericCommandObject { //command mana
     }
 
     public GenericSubCommandManager instantiateSubCommandManager(String executor, String description) {
-        GenericSubCommandManager genericSubCommandManager = new GenericSubCommandManager(executor, description, depth + 1);
+        GenericSubCommandManager genericSubCommandManager = new GenericSubCommandManager(executor, description, depth + 1, preceding);
         this.subCommands.add(genericSubCommandManager);
-        subCommandManagers.put(executor,genericSubCommandManager);
+        subCommandManagers.put(executor, genericSubCommandManager);
         return genericSubCommandManager;
     }
-
-
 }

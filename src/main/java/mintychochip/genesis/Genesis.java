@@ -1,7 +1,6 @@
 package mintychochip.genesis;
 
 import com.fathzer.soft.javaluator.DoubleEvaluator;
-import mintychochip.genesis.config.GenesisConfig;
 import mintychochip.genesis.config.GenesisRegistry;
 import mintychochip.genesis.listener.AbstractItemListener;
 import mintychochip.genesis.listener.BindListener;
@@ -21,6 +20,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,6 +109,13 @@ public final class Genesis extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        Connection connection = genesisConfigManager.getDatabaseConfig().getDb().getConnection();
+        try {
+            if(connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
