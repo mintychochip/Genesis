@@ -2,8 +2,10 @@ package mintychochip.genesis.util;
 
 import mintychochip.genesis.config.abstraction.GenericConfig;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,7 +39,6 @@ public class Keys {
         keys.put(key, namespacedKey);
         return namespacedKey;
     }
-
     public void putKey(NamespacedKey namespacedKey, String key) {
         keys.put(key, namespacedKey);
     }
@@ -63,6 +64,19 @@ public class Keys {
         itemMeta.getPersistentDataContainer().set(keys.get(key), dataType, value);
         return assign.setItemMeta(itemMeta);
     }
+    public <T> boolean assignGenericToItemMeta(String key, PersistentDataType dataType, T value, ItemMeta itemMeta) {
+        if(itemMeta == null) {
+            return false;
+        }
+        if (key == null) {
+            return false;
+        }
+        if (!keys.containsKey(key)) {
+            return false;
+        }
+        itemMeta.getPersistentDataContainer().set(keys.get(key), dataType, value);
+        return true;
+    }
 
     public boolean assignStringToItemStack(String key, String value, ItemStack assign) {
         return assignGenericToItemStack(key, PersistentDataType.STRING, value, assign);
@@ -70,6 +84,9 @@ public class Keys {
 
     public boolean assignByteArrayToItemStack(String key, byte[] value, ItemStack assign) {
         return assignGenericToItemStack(key, PersistentDataType.BYTE_ARRAY, value, assign);
+    }
+    public boolean assignByteArrayToItemMeta(String key, byte[] value, ItemMeta assign) {
+        return assignGenericToItemMeta(key,PersistentDataType.BYTE_ARRAY,value,assign);
     }
 
     public boolean assignIntegerToItemStack(String key, int value, ItemStack assign) {

@@ -30,7 +30,11 @@ public class GenesisConfig extends GenericConfig {
 
     public Set<String> ingredientsKeys;
 
+    private final GenesisConfigurationSection globalSettings = getMainConfigurationSection("global-settings");
+
+    private final GenesisConfigurationSection rarity = getMainConfigurationSection(GenesisConfigMarker.rarity);
     private final Set<NamespacedKey> customRecipes = new HashSet<>();
+
     public GenesisConfig(String fileName, JavaPlugin plugin) {
         super(fileName, plugin);
         if (!loadThemes()) {
@@ -47,6 +51,7 @@ public class GenesisConfig extends GenericConfig {
             }
         }.runTaskLater(Genesis.getInstance(), 10L);
     }
+
     private NamespacedKey getCraftingResultKey(JavaPlugin plugin, String key) {
         if (Genesis.getItemManager().resultMappingContainsKey(key)) {
             return Genesis.getItemManager().getResultKeyFromString(key);
@@ -64,6 +69,9 @@ public class GenesisConfig extends GenericConfig {
 
     private boolean smeltingRecipes() throws IOException {
         GenesisConfigurationSection smeltingRecipes = getMainConfigurationSection(GenesisConfigMarker.smelting_recipes);
+        if (smeltingRecipes.isNull()) {
+            return false;
+        }
         for (String key : smeltingRecipes.getKeys(false)) {
             ItemStack result = getCraftingResult(key);
             NamespacedKey namespacedKey = getCraftingResultKey(Genesis.getInstance(), key);
@@ -94,8 +102,15 @@ public class GenesisConfig extends GenericConfig {
         return true;
     }
 
+    public GenesisConfigurationSection getGlobalSettings() {
+        return globalSettings;
+    }
+
     private boolean loadRecipes() throws IOException { //da mega method //have to make it case insensitive
-        ConfigurationSection recipes = configReader.getConfigurationSection(GenesisConfigMarker.crafting_recipes);
+        GenesisConfigurationSection recipes = new GenesisConfigurationSection(configReader.getConfigurationSection(GenesisConfigMarker.crafting_recipes), "awd");
+        if (recipes.isNull()) {
+            return false;
+        }
         for (String key : recipes.getKeys(false)) {
             ItemStack result = null;
             NamespacedKey namespacedKey = null;
@@ -112,11 +127,11 @@ public class GenesisConfig extends GenericConfig {
             if (!a && !b) {
                 throw new IOException();
             }
-            ConfigurationSection recipeAtKey = recipes.getConfigurationSection(key);
+            GenesisConfigurationSection recipeAtKey = recipes.getConfigurationSection(key);
             if (recipeAtKey == null) {
                 throw new IOException("Recipe is null");
             }
-            ConfigurationSection ingredients = recipeAtKey.getConfigurationSection("ingredients");
+            GenesisConfigurationSection ingredients = recipeAtKey.getConfigurationSection("ingredients");
             if (ingredients == null) {
                 throw new IOException("Ingredients cannot be null");
             }
@@ -199,6 +214,10 @@ public class GenesisConfig extends GenericConfig {
             GenesisRegistry.getThemes().put(key.toUpperCase(), new GenesisTheme(charArray));
         }
         return true;
+    }
+
+    public GenesisConfigurationSection getRarity() {
+        return rarity;
     }
 
     public Set<NamespacedKey> getCustomRecipes() {

@@ -71,8 +71,13 @@
     <dependencies>
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
+            <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-platform-bukkit</artifactId>
+            <version>4.3.2</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>

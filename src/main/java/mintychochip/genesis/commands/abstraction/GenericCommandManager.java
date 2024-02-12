@@ -2,7 +2,6 @@ package mintychochip.genesis.commands.abstraction;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class GenericCommandManager extends GenericCommandObject { //command mana
     protected List<SubCommand> subCommands = new ArrayList<>();
     protected List<String> menu = new ArrayList<>();
     protected Map<String, GenericSubCommandManager> subCommandManagers = new HashMap<>();
-    protected String preceding; //contains the preceding string at given depth can probably deprecate depth after using this
+    protected String preceding = ""; //contains the preceding string at given depth can probably deprecate depth after using this
 
     public GenericCommandManager(String executor, String description, int depth) {
         super(executor, description, depth);

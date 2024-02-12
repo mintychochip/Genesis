@@ -17,7 +17,7 @@ import java.util.UUID;
 
 public class BindListener implements Listener {
 
-    @EventHandler
+    //@EventHandler
     public void onBindBookInteract(final PlayerInteractEvent event) {
         PlayerInventory inventory = event.getPlayer().getInventory();
         UUID user = event.getPlayer().getUniqueId();

@@ -1,32 +1,34 @@
 package mintychochip.genesis.container;
 
+import mintychochip.genesis.util.Rarity;
+import mintychochip.genesis.util.Serializer;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
+import java.io.Serial;
 import java.io.Serializable;
 
-public class ItemData implements Serializable {
+public class ItemData implements Serializable, Embeddable {
+    @Serial
+    private static final long serialVersionUID = 123123;
+    private static final String key = "items";
 
-    protected String displayName;
-    protected final String key;
-
-    public ItemData(String key) {
-        this.key = key;
+    public String toString() {
+        return key;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    @Override
+    public void serialize(ItemStack itemStack) {
+        Serializer.serializeToItem(this, itemStack);
     }
 
-    public ItemData setDisplayName(String displayName) {
-        this.displayName = displayName;
-        return this;
+    @Override
+    public void serialize(ItemMeta itemMeta) {
+        Serializer.serializeToMeta(this, itemMeta);
     }
-
-    public String toString() {
-        return displayName + " " + key;
-    }
-
-
 }

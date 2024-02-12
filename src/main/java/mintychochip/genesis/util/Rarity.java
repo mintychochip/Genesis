@@ -1,28 +1,29 @@
 package mintychochip.genesis.util;
 
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.util.RGBLike;
 import org.bukkit.ChatColor;
+
+import javax.naming.Name;
 
 public enum Rarity {
     COMMON('7'),
-    UNCOMMON('a'),
-    RARE('9'),
-    EPIC('5'),
-    LEGENDARY('6'),
-    ARTIFACT('c'),
-    DEFAULT('f');
+    UNCOMMON ('a'),
+    RARE ('9'),
+    EPIC ('5'),
+    LEGENDARY ('6'),
+    ARTIFACT ('c'),
+    DEFAULT ('f');
 
-    public final char colorCode;
-
-    Rarity(char colorCode) {
-        this.colorCode = colorCode;
+    private final char color;
+    Rarity(char color) {
+        this.color = color;
     }
-
-    public char getColorCode() {
-        return colorCode;
+    public char getColor() {
+        return color;
     }
-
-    public ChatColor getChatColorCode() {
-        return ChatColor.getByChar(colorCode);
+    public ChatColor getLegacyColor() {
+        return ChatColor.getByChar(color);
     }
-
 }

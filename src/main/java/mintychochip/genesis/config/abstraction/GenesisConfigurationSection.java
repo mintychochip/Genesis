@@ -16,6 +16,9 @@ public class GenesisConfigurationSection {
         this.main = configurationSection;
         this.path = path;
     }
+    public boolean isNull() {
+        return this.main == null;
+    }
 
     public Set<String> getKeys(boolean b) {
         return main.getKeys(b);
@@ -63,5 +66,4 @@ public class GenesisConfigurationSection {
     public String getString(String marker) {
         return main.getString(marker);
     }
-
 }

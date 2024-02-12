@@ -1,10 +1,23 @@
 package mintychochip.genesis.listener;
 
+import mintychochip.genesis.Genesis;
+import mintychochip.genesis.container.ItemData;
+import mintychochip.genesis.util.Serializer;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+
+import java.io.IOException;
+import java.util.Set;
 
 public class FlagListener implements Listener {
     private final double fallDamageCoefficient = 0.5;
@@ -38,6 +51,28 @@ public class FlagListener implements Listener {
                     }
                     location.subtract(i, j, k);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    private void onPlayerInteract(final PlayerInteractEvent event) {
+        PlayerInventory inventory = event.getPlayer().getInventory();
+        ItemMeta itemMeta = inventory.getItemInMainHand().getItemMeta();
+        if(itemMeta == null) {
+            return;
+        }
+        PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
+        Set<NamespacedKey> keys = persistentDataContainer.getKeys();
+        Bukkit.broadcastMessage(keys.toString());
+        if(persistentDataContainer.has(Genesis.getKey("component"), PersistentDataType.BYTE_ARRAY)) {
+            byte[] items = persistentDataContainer.get(Genesis.getKey("component"), PersistentDataType.BYTE_ARRAY);
+            try {
+                ItemData deserialize = Serializer.deserialize(items);
+                String string = deserialize.toString();
+                Bukkit.broadcastMessage(string);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }

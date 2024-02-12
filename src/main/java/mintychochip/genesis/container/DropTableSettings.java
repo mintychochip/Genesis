@@ -1,15 +1,10 @@
 package mintychochip.genesis.container;
 
 public class DropTableSettings {
-
     private double dropRate = 0.5;
-
     private int minCount = 0;
-
     private int maxCount = 1;
-
     private boolean lootingApplicable = false;
-
     private boolean requiresPlayerKill = false;
 
     public DropTableSettings(double dropRate, int minCount, int maxCount, boolean lootingApplicable, boolean requiresPlayerKill) {

@@ -40,5 +40,15 @@ public class Serializer {
             throw new RuntimeException(e);
         }
     }
+    public static <T extends ItemData> boolean serializeToMeta(T data, ItemMeta itemMeta) {
+        if (itemMeta == null) {
+            return false;
+        }
+        try {
+            return Genesis.getKeys().assignByteArrayToItemMeta(data.getKey(),Serializer.serialize(data),itemMeta);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }

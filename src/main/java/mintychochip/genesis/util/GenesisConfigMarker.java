@@ -25,4 +25,9 @@ public class GenesisConfigMarker extends ConfigMarker {
     public static String originator = "origin";
 
     public static String inherits = "inherits";
+
+    //USAGE IN DAMAGETYPE CONFIG
+
+    public static String immunity = "immunity";
+
 }

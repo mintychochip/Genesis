@@ -1,23 +1,36 @@
 package mintychochip.genesis.commands.abstraction;
 
+import mintychochip.genesis.Genesis;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class GenericMainCommandManager extends GenericCommandManager implements CommandExecutor,TabCompleter {
 
     public GenericMainCommandManager(String executor, String description) {
         super(executor, description);
         preceding = executor;
+        new BukkitRunnable() {
+            public void run() {
+                for (SubCommand subCommand : subCommands) {
+                    if(subCommand instanceof GenericCommandObject gco) {
+                        menu.add("/" + executor + " " + gco.getExecutor());
+                    }
+                }
+
+            }
+        }.runTaskLater(Genesis.getInstance(),10L);
     } //command managers at 0
 
     @Override
@@ -49,11 +62,22 @@ public class GenericMainCommandManager extends GenericCommandManager implements 
         List<String> str = new ArrayList<>();
         int tabCompletionDepth = strings.length;
         List<SubCommand> commands = subCommands;
-        if (strings[tabCompletionDepth - 1].equalsIgnoreCase("")) {
             if(tabCompletionDepth != 1) {
                 for (int i = 0; i < tabCompletionDepth - 1; i++) {
                     GenericSubCommandManager genericSubCommandManager = subCommandManagers.get(strings[i]);
                     if(genericSubCommandManager == null) {
+                        for (SubCommand subCommand : commands) {
+                            if(subCommand instanceof GenericCommand gc) {
+                                if(gc.getExecutor().equals(strings[tabCompletionDepth - 2])) {
+                                    Set<String> strings1 = gc.getStringsAtDepth().get(0);
+                                    if(strings1 == null) {
+                                        return null;
+                                    }
+                                    str.addAll(strings1);
+                                    return str;
+                                }
+                            }
+                        }
                         return null;
                     }
                     commands = genericSubCommandManager.getSubCommands();
@@ -64,7 +88,6 @@ public class GenericMainCommandManager extends GenericCommandManager implements 
                     str.add(gco.getExecutor());
                 }
             }
-        }
         return str;
     }
 

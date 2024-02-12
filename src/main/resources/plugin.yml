@@ -5,3 +5,5 @@ api-version: '1.20'
 commands:
   mappings:
     description: sends player mappings
+  foods:
+    description: sends foods

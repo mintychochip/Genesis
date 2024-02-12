@@ -7,6 +7,7 @@ import mintychochip.genesis.container.DropTableSettings;
 import mintychochip.genesis.container.GenesisDropTableEntry;
 import mintychochip.genesis.util.EnumUtil;
 import mintychochip.genesis.util.GenesisConfigMarker;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.EntityType;
@@ -15,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 public class DropTableConfig extends GenericConfig {
 
@@ -37,6 +39,7 @@ public class DropTableConfig extends GenericConfig {
     }
 
     public boolean loadDropTable() throws IOException {
+        Bukkit.getServer().getLogger().info("Starting Drop Table");
         for (String key : dropTableSection.getKeys(false)) {
             if (EnumUtil.isInEnum(EntityType.class, key.toUpperCase())) {
                 EntityType entityType = Enum.valueOf(EntityType.class, key.toUpperCase());
@@ -58,8 +61,10 @@ public class DropTableConfig extends GenericConfig {
                     }
 
                     String inherits = itemSection.getString(GenesisConfigMarker.inherits); //indirect check in copySettingsFromSection
-
-                    if (copySettingsFromSection(itemSection.getConfigurationSection("settings"), tableSettings) && copySettingsFromSection(dropTableSection.getConfigurationSection(inherits), tableSettings)) {
+                    if(inherits != null) {
+                        copySettingsFromSection(dropTableSection.getConfigurationSection(inherits), tableSettings);
+                    }
+                    if (copySettingsFromSection(itemSection.getConfigurationSection("settings"), tableSettings)) {
                         GenesisRegistry.addDropTableEntry(entityType, new GenesisDropTableEntry(itemStackFromKey, tableSettings));
                     }
                 }

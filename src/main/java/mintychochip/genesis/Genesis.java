@@ -12,6 +12,8 @@ import mintychochip.genesis.manager.RecipeRegistry;
 import mintychochip.genesis.particle.ParticleEngine;
 import mintychochip.genesis.util.Keys;
 import mintychochip.genesis.util.MathUtil;
+import net.kyori.adventure.audience.Audiences;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -19,6 +21,7 @@ import org.bukkit.inventory.CraftingRecipe;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -87,13 +90,24 @@ public final class Genesis extends JavaPlugin {
         return genesisConfigManager;
     }
 
+    private BukkitAudiences adventure;
+
+    public @NonNull BukkitAudiences adventure() {
+        if (this.adventure == null) {
+            throw new IllegalStateException("Tried to access Adventure when the plugin was disabled!");
+        }
+        return this.adventure;
+    }
+
     @Override
     public void onEnable() {
         mathUtil = new MathUtil();
         instance = this;
+        this.adventure = BukkitAudiences.create(this);
         keys = new Keys();
+        Genesis.getKeys().addKey(this, "items");
         for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
-            GenesisRegistry.getLoadedPlugins().put(plugin.getName().toLowerCase(),plugin);
+            GenesisRegistry.getLoadedPlugins().put(plugin.getName().toLowerCase(), plugin);
         }
 
         genesisPlayerManager = new GenesisPlayerManager();
@@ -105,17 +119,14 @@ public final class Genesis extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EntityDeathListener(), this);
         keys.generateKeys(this, genesisConfigManager.getGenesisConfig());
         getCommand("mappings").setExecutor(new MappingCommand());
+        getCommand("foods").setExecutor(new Foods());
     }
 
     @Override
     public void onDisable() {
-        Connection connection = genesisConfigManager.getDatabaseConfig().getDb().getConnection();
-        try {
-            if(connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (this.adventure != null) {
+            this.adventure.close();
+            this.adventure = null;
         }
     }
 }
