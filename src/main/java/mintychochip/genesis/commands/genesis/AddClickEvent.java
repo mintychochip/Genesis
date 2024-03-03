@@ -1,12 +1,11 @@
-package mintychochip.genesis.chestclaim;
+package mintychochip.genesis.commands.genesis;
 
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
 import org.bukkit.entity.Player;
 
-public class ChestClaim extends GenericCommandObject implements SubCommand {
-
-    public ChestClaim(String executor, String description) {
+public class AddClickEvent extends GenericCommandObject implements SubCommand {
+    public AddClickEvent(String executor, String description) {
         super(executor, description);
     }
 

@@ -1,11 +1,6 @@
 package mintychochip.genesis.util;
 
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.util.RGBLike;
 import org.bukkit.ChatColor;
-
-import javax.naming.Name;
 
 public enum Rarity {
     COMMON('7'),

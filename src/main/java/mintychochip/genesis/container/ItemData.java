@@ -1,34 +1,22 @@
 package mintychochip.genesis.container;
 
-import mintychochip.genesis.util.Rarity;
-import mintychochip.genesis.util.Serializer;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import mintychochip.genesis.Genesis;
+import mintychochip.genesis.container.items.interfaces.Embeddable;
+import org.bukkit.NamespacedKey;
+import org.bukkit.plugin.Plugin;
 
-import java.io.Serial;
-import java.io.Serializable;
+public class ItemData implements Embeddable {
 
-public class ItemData implements Serializable, Embeddable {
-    @Serial
-    private static final long serialVersionUID = 123123;
-    private static final String key = "items";
+    private static final NamespacedKey key = Genesis.getKey("items");
 
-    public String toString() {
+    private String type = this.getClass().getName();
+    @Override
+    public NamespacedKey getKey() {
         return key;
     }
 
     @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public void serialize(ItemStack itemStack) {
-        Serializer.serializeToItem(this, itemStack);
-    }
-
-    @Override
-    public void serialize(ItemMeta itemMeta) {
-        Serializer.serializeToMeta(this, itemMeta);
+    public String getType() {
+        return null;
     }
 }

@@ -4,7 +4,6 @@ import mintychochip.genesis.color.GenesisTheme;
 import mintychochip.genesis.container.GenesisDropTableEntry;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;

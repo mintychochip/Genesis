@@ -2,10 +2,8 @@ package mintychochip.genesis.listener;
 
 import mintychochip.genesis.Genesis;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +36,7 @@ public class BindListener implements Listener {
     }
 
     public void closeInventory(Player player, UUID uuid) {
-        Bukkit.broadcastMessage(ChatColor.RED + "This item belongs to: " + uuid.toString());
+       // Bukkit.broadcastMessage(ChatColor.RED + "This item belongs to: " + uuid.toString());
         player.closeInventory();
     }
 

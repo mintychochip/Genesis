@@ -13,15 +13,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ParticleEngine {
-    public static List<BukkitTask> renderAll(List<ParticlePackage> packages, Player player) {
+
+    private final MathUtil mathUtil;
+    public ParticleEngine(MathUtil mathUtil) {
+        this.mathUtil = mathUtil;
+    }
+    public List<BukkitTask> renderAll(List<ParticlePackage> packages, Player player, Color color) {
         List<BukkitTask> taskList = new ArrayList<>();
         for (ParticlePackage particlePackage : packages) {
-            taskList.add(render(particlePackage.getParticleShape(), particlePackage.getDelay(), particlePackage.getInterval(), player));
+            taskList.add(render(particlePackage.getParticleShape(), particlePackage.getDelay(), particlePackage.getInterval(), player, color));
         }
         return taskList;
     }
 
-    public static BukkitTask render(ParticleShape shape, long delay, long interval, Player player) {
+    public BukkitTask render(ParticleShape shape, long delay, long interval, Player player, Color color) {
         return new BukkitRunnable() {
             final Location dir = player.getEyeLocation();
             Location location = shape.getBoundLocation();
@@ -39,7 +44,7 @@ public class ParticleEngine {
                     Vector vector = calculateOffsetVector(shape, i);
                     vector = MathUtil.rotateFunction(vector, dir);
                     Location add = location.add(vector);
-                    location.getWorld().spawnParticle(shape.getParticleList().get(0), add, 1, 0, 0, 0, 0, new Particle.DustOptions(Color.BLACK, 0.5F), true);
+                    location.getWorld().spawnParticle(shape.getParticleList().get(0), add, 1, 0, 0, 0, 0, new Particle.DustOptions(color, 0.5F), true);
 
                     location.subtract(vector);
                 }
@@ -86,13 +91,13 @@ public class ParticleEngine {
 
     }
 
-    public static double circleExpressionEvaluation(double radius, double time, String function) {
+    public double circleExpressionEvaluation(double radius, double time, String function) {
         StaticVariableSet<Double> variables = new StaticVariableSet<>();
         variables.set("i", time);
-        return radius * MathUtil.evaluateFunction(function, variables);
+        return radius * mathUtil.evaluateFunction(function, variables);
     }
 
-    public static Vector calculateOffsetVector(ParticleShape shape, double time) {
+    public Vector calculateOffsetVector(ParticleShape shape, double time) {
         ShapeMeta shapeMeta = shape.getShapeMeta();
         double radius = shapeMeta.getRadius();
         double x = circleExpressionEvaluation(radius, time, shape.getX());

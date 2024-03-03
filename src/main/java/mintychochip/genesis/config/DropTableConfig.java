@@ -5,6 +5,7 @@ import mintychochip.genesis.config.abstraction.GenericConfig;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import mintychochip.genesis.container.DropTableSettings;
 import mintychochip.genesis.container.GenesisDropTableEntry;
+import mintychochip.genesis.manager.RecipeRegistry;
 import mintychochip.genesis.util.EnumUtil;
 import mintychochip.genesis.util.GenesisConfigMarker;
 import org.bukkit.Bukkit;
@@ -16,16 +17,17 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.IOException;
-import java.util.logging.Level;
 
 public class DropTableConfig extends GenericConfig {
 
+    private final RecipeRegistry recipeRegistry;
     private final GenesisConfigurationSection dropTableSection = getMainConfigurationSection("drop-table");
     private final GenesisConfigurationSection defaults = getMainConfigurationSection("default.settings");
     private final DropTableSettings defaultSettings = generateDropTableSettings(defaults);
 
-    public DropTableConfig(String path, JavaPlugin plugin) {
+    public DropTableConfig(String path, JavaPlugin plugin,RecipeRegistry recipeRegistry) {
         super(path, plugin);
+        this.recipeRegistry = recipeRegistry;
         new BukkitRunnable() {
             public void run() {
                 try {
@@ -99,8 +101,8 @@ public class DropTableConfig extends GenericConfig {
             return new ItemStack(Material.valueOf(dropTableKey.toUpperCase()));
         }
         NamespacedKey namespacedKey = NamespacedKey.fromString(dropTableKey, plugin);
-        if (Genesis.getItemManager().itemsContainsKey(namespacedKey)) {
-            return Genesis.getItemManager().getRecipeItem(namespacedKey);
+        if (recipeRegistry.itemsContainsKey(namespacedKey)) {
+            return recipeRegistry.getRecipeItem(namespacedKey);
         }
         return new ItemStack(Material.valueOf(dropTableKey.toUpperCase()));
     }

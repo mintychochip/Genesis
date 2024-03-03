@@ -7,7 +7,6 @@ import mintychochip.genesis.util.GenesisConfigMarker;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.util.List;
 
 public class DamageTypeConfig extends GenericConfig {

@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface Bindable {
@@ -13,6 +14,9 @@ public interface Bindable {
         Genesis.getKeys().assignStringToItemStack("player",playerName,itemStack);
         ItemMeta itemMeta = itemStack.getItemMeta();
         List<String> lore = itemMeta.getLore();
+        if(lore == null) {
+            lore = new ArrayList<>();
+        }
         lore.add(ChatColor.DARK_GRAY + "This item belongs to: " + ChatColor.GOLD + playerName);
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);

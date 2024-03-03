@@ -1,4 +1,4 @@
-package mintychochip.genesis.container;
+package mintychochip.genesis.container.items.interfaces;
 
 import mintychochip.genesis.util.Rarity;
 

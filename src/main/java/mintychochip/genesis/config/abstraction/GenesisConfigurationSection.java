@@ -16,6 +16,7 @@ public class GenesisConfigurationSection {
         this.main = configurationSection;
         this.path = path;
     }
+
     public boolean isNull() {
         return this.main == null;
     }

@@ -4,14 +4,13 @@ import mintychochip.genesis.Genesis;
 import mintychochip.genesis.color.GenesisTheme;
 import mintychochip.genesis.config.abstraction.GenericConfig;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
-import mintychochip.genesis.container.GenesisDropTableEntry;
+import mintychochip.genesis.manager.RecipeRegistry;
 import mintychochip.genesis.util.EnumUtil;
 import mintychochip.genesis.util.GenesisConfigMarker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.RecipeChoice.ExactChoice;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,14 +28,21 @@ public class GenesisConfig extends GenericConfig {
     private Map<Character, RecipeChoice> choiceMap;
 
     public Set<String> ingredientsKeys;
-
+    
+    private final RecipeRegistry recipeRegistry;
     private final GenesisConfigurationSection globalSettings = getMainConfigurationSection("global-settings");
 
+    private final GenesisConfigurationSection itemInfo = getMainConfigurationSection("item-info");
     private final GenesisConfigurationSection rarity = getMainConfigurationSection(GenesisConfigMarker.rarity);
     private final Set<NamespacedKey> customRecipes = new HashSet<>();
 
-    public GenesisConfig(String fileName, JavaPlugin plugin) {
+    public GenesisConfigurationSection getItemInfo() {
+        return itemInfo;
+    }
+
+    public GenesisConfig(String fileName, JavaPlugin plugin, RecipeRegistry recipeRegistry) {
         super(fileName, plugin);
+        this.recipeRegistry = recipeRegistry;
         if (!loadThemes()) {
             //something
         }
@@ -53,16 +59,16 @@ public class GenesisConfig extends GenericConfig {
     }
 
     private NamespacedKey getCraftingResultKey(JavaPlugin plugin, String key) {
-        if (Genesis.getItemManager().resultMappingContainsKey(key)) {
-            return Genesis.getItemManager().getResultKeyFromString(key);
+        if (recipeRegistry.resultMappingContainsKey(key)) {
+            return recipeRegistry.getResultKeyFromString(key);
         }
         return new NamespacedKey(plugin, key);
     }
 
 
     private ItemStack getCraftingResult(String key) {
-        if (Genesis.getItemManager().resultMappingContainsKey(key)) {
-            return Genesis.getItemManager().getResultItemFromString(key);
+        if (recipeRegistry.resultMappingContainsKey(key)) {
+            return recipeRegistry.getResultItemFromString(key);
         }
         return new ItemStack(Enum.valueOf(Material.class, key.toUpperCase()));
     }
@@ -75,7 +81,7 @@ public class GenesisConfig extends GenericConfig {
         for (String key : smeltingRecipes.getKeys(false)) {
             ItemStack result = getCraftingResult(key);
             NamespacedKey namespacedKey = getCraftingResultKey(Genesis.getInstance(), key);
-            boolean a = Genesis.getItemManager().resultMappingContainsKey(key);
+            boolean a = recipeRegistry.resultMappingContainsKey(key);
             boolean b = EnumUtil.isInEnum(Material.class, key.toUpperCase());
             if (!a && !b) {
                 throw new IOException();
@@ -86,13 +92,13 @@ public class GenesisConfig extends GenericConfig {
             }
             GenesisConfigurationSection ingredients = recipeAtKey.getConfigurationSection(GenesisConfigMarker.ingredients);
             String material = ingredients.getString(GenesisConfigMarker.smelting_material);
-            boolean c = Genesis.getItemManager().itemMappingContainsKey(material);
+            boolean c = recipeRegistry.itemMappingContainsKey(material);
             boolean d = EnumUtil.isInEnum(Material.class, material.toUpperCase());
             float cookXP = (float) recipeAtKey.getDouble(GenesisConfigMarker.cookingXp);
             int cookTime = recipeAtKey.getInt(GenesisConfigMarker.cookingTime);
 
             if (c) {
-                ItemStack ingredient = Genesis.getItemManager().getRecipeItemFromString(material);
+                ItemStack ingredient = recipeRegistry.getRecipeItemFromString(material);
                 Bukkit.addRecipe(new FurnaceRecipe(namespacedKey, result, new ExactChoice(ingredient), cookXP, cookTime));
             }
             if (d) {
@@ -114,11 +120,11 @@ public class GenesisConfig extends GenericConfig {
         for (String key : recipes.getKeys(false)) {
             ItemStack result = null;
             NamespacedKey namespacedKey = null;
-            boolean a = Genesis.getItemManager().resultMappingContainsKey(key);
+            boolean a = recipeRegistry.resultMappingContainsKey(key);
             boolean b = EnumUtil.isInEnum(Material.class, key.toUpperCase());
             if (a) {
-                result = Genesis.getItemManager().getResultItemFromString(key);
-                namespacedKey = Genesis.getItemManager().getResultKeyFromString(key);
+                result = recipeRegistry.getResultItemFromString(key);
+                namespacedKey = recipeRegistry.getResultKeyFromString(key);
             }
             if (b) {
                 result = new ItemStack(Enum.valueOf(Material.class, key.toUpperCase()));
@@ -141,7 +147,7 @@ public class GenesisConfig extends GenericConfig {
                 shapedRecipe.shape(recipeAtKey.getStringList("shape").toArray(new String[0]));
                 for (String ingredientsKey : ingredients.getKeys(false)) {
                     ingredientsKeys = ingredients.getKeys(false);
-                    boolean c = Genesis.getItemManager().itemMappingContainsKey(ingredientsKey);
+                    boolean c = recipeRegistry.itemMappingContainsKey(ingredientsKey);
                     boolean d = EnumUtil.isInEnum(Material.class, ingredientsKey.toUpperCase());
                     String shapeCode = ingredients.getString(ingredientsKey);
                     if (shapeCode == null) {
@@ -151,7 +157,7 @@ public class GenesisConfig extends GenericConfig {
                         throw new IOException("cannot be other than 1");
                     }
                     if (c) {
-                        ItemStack ingredient = Genesis.getItemManager().getRecipeItemFromString(ingredientsKey);
+                        ItemStack ingredient = recipeRegistry.getRecipeItemFromString(ingredientsKey);
                         shapedRecipe.setIngredient(shapeCode.charAt(0), new RecipeChoice.ExactChoice(ingredient));
                     }
                     if (d) {
@@ -165,10 +171,10 @@ public class GenesisConfig extends GenericConfig {
                 for (String ingredientsKey : ingredients.getKeys(false)) {
                     ItemStack ingredient = null;
                     int count = ingredients.getInt(ingredientsKey);
-                    boolean c = Genesis.getItemManager().itemMappingContainsKey(ingredientsKey);
+                    boolean c = recipeRegistry.itemMappingContainsKey(ingredientsKey);
                     boolean d = EnumUtil.isInEnum(Material.class, ingredientsKey.toUpperCase());
                     if (c) {
-                        ingredient = Genesis.getItemManager().getRecipeItemFromString(ingredientsKey);
+                        ingredient = recipeRegistry.getRecipeItemFromString(ingredientsKey);
                         for (int i = 0; i < count; i++) {
                             shapelessRecipe.addIngredient(new ExactChoice(ingredient));
                         }

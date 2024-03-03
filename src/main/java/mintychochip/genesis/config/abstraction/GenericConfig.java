@@ -1,6 +1,5 @@
 package mintychochip.genesis.config.abstraction;
 
-import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import mintychochip.genesis.util.ConfigReader;
 import org.bukkit.plugin.java.JavaPlugin;
 

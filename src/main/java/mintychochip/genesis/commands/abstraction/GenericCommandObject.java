@@ -3,8 +3,6 @@ package mintychochip.genesis.commands.abstraction;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
-
 public abstract class GenericCommandObject {
 
     @NotNull

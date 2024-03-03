@@ -7,3 +7,7 @@ commands:
     description: sends player mappings
   foods:
     description: sends foods
+  sphere:
+    description: spheres
+  genesis:
+    description: debug commands

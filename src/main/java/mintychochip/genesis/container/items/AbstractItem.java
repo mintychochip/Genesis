@@ -1,12 +1,17 @@
-package mintychochip.genesis.container;
+package mintychochip.genesis.container.items;
 
+import com.google.gson.Gson;
 import mintychochip.genesis.Genesis;
 import mintychochip.genesis.color.GenesisTheme;
 import mintychochip.genesis.config.GenesisRegistry;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
+import mintychochip.genesis.container.ClickableActionData;
+import mintychochip.genesis.container.items.actions.ActionPacket;
+import mintychochip.genesis.container.items.actions.EventAction;
+import mintychochip.genesis.container.items.interfaces.Appraisable;
+import mintychochip.genesis.container.items.interfaces.Embeddable;
 import mintychochip.genesis.util.GenesisConfigMarker;
 import mintychochip.genesis.util.Rarity;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -14,6 +19,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
@@ -40,6 +46,13 @@ public class AbstractItem {
         protected GenesisTheme genesisTheme;
         protected List<String> lore;
 
+        public ItemBuilder(JavaPlugin instance, ItemStack itemStack, boolean boundOnCraft) {
+            this.instance = instance;
+            this.itemMeta = itemStack.getItemMeta();
+            this.itemStack = itemStack;
+            this.boundOnCraft = boundOnCraft;
+        }
+
         public ItemBuilder(JavaPlugin instance, Material material, boolean boundOnCraft, String genesisTheme) {
             this.instance = instance;
             this.itemStack = new ItemStack(material);
@@ -56,16 +69,6 @@ public class AbstractItem {
             return this;
         }
 
-        public ItemBuilder addBulletedLore(String term, String definition) {
-            TextComponent hello = text().content("Hello").color(color(color(0x13f832)))
-                    .append(text(" world!", GREEN))
-                    .append(Component.text("me").hoverEvent(HoverEvent.showText(Component.text("asdsadasd")))).build();
-            Player player = Bukkit.getPlayer("chinaisfashion");
-            String serialize = LegacyComponentSerializer.legacySection().serialize(hello);
-            Bukkit.broadcastMessage(serialize);
-            Genesis.getInstance().adventure().player(player).sendMessage(hello);
-            return this;
-        }
 
         public ItemBuilder setDisplayName(String name) {
             if (name == null) {
@@ -115,6 +118,7 @@ public class AbstractItem {
             itemMeta.setCustomModelData(model);
             return this;
         }
+
         public AbstractItem build() {
             if (itemStack.setItemMeta(itemMeta)) {
                 return new AbstractItem(this);
@@ -141,9 +145,9 @@ public class AbstractItem {
                     .setCustomModelData(main.getInt(GenesisConfigMarker.custom_model))
                     .setDisplayName(main.getString(GenesisConfigMarker.display_name))
                     .setUnstackable(main.getBoolean(GenesisConfigMarker.custom_model));
-            List<String> stringList = main.getStringList(GenesisConfigMarker.lore);
-            if (stringList != null) {
-                this.addLore(stringList);
+            List<String> lore = main.getStringList(GenesisConfigMarker.lore);
+            if (lore != null) {
+                this.addLore(lore);
             }
         }
 
@@ -154,21 +158,38 @@ public class AbstractItem {
     }
 
     public static class EmbeddedDataBuilder extends ConfigurationItemBuilder {
-        protected Embeddable embeddable;
+        protected List<Embeddable> embeddableList = new ArrayList<>();
+        protected Embeddable itemEmbeddable;
 
         public EmbeddedDataBuilder(JavaPlugin instance, Material material, GenesisConfigurationSection main, boolean boundOnCraft, String genesisTheme, Embeddable embeddable) {
             super(instance, material, main, boundOnCraft, genesisTheme);
-            this.embeddable = embeddable;
+            itemEmbeddable = embeddable;
+            embeddableList.add(embeddable);
         }
 
         public EmbeddedDataBuilder(JavaPlugin instance, GenesisConfigurationSection main, boolean boundOnCraft, String genesisTheme, Embeddable embeddable) {
             super(instance, main, boundOnCraft, genesisTheme);
-            this.embeddable = embeddable;
+            itemEmbeddable = embeddable;
+            embeddableList.add(embeddable);
+            embeddableList.add(new ClickableActionData());
         }
 
         public EmbeddedDataBuilder setRarity(Rarity rarity) {
-            if (embeddable instanceof Appraisable appraisable) {
+            if (embeddableList instanceof Appraisable appraisable) {
                 appraisable.setRarity(rarity);
+            }
+            return this;
+        }
+
+        public EmbeddedDataBuilder addClickEvent(String key, ActionPacket actionPacket) {
+            Embeddable clickable = null;
+            for (Embeddable embeddable : embeddableList) {
+                if (embeddable.getClass().getName().equalsIgnoreCase(ClickableActionData.class.getName())) {
+                    clickable = embeddable;
+                }
+            }
+            if (clickable instanceof ClickableActionData cad) {
+                cad.addActionPacket(key, actionPacket);
             }
             return this;
         }
@@ -179,8 +200,14 @@ public class AbstractItem {
             if (rarity != null) {
                 this.setRarity(rarity).setDisplayName(rarity.getLegacyColor() + itemMeta.getDisplayName());
             }
-            if (embeddable != null) {
-                embeddable.serialize(itemMeta);
+            Gson gson = new Gson();
+            if (embeddableList != null) {
+                for (Embeddable embeddable : embeddableList) {
+                    if (embeddable.getKey() == null) {
+                        throw new RuntimeException("Embeddable key was null: " + embeddable.getType());
+                    }
+                    itemMeta.getPersistentDataContainer().set(embeddable.getKey(), PersistentDataType.STRING, gson.toJson(embeddable));
+                }
             }
             return super.build();
         }
@@ -191,6 +218,10 @@ public class AbstractItem {
         this.itemStack = itemBuilder.itemStack;
         this.itemMeta = itemBuilder.itemMeta;
         this.boundOnCraft = itemBuilder.boundOnCraft;
+    }
+
+    public boolean addClickListener(Action action) {
+        return false;
     }
 
     public JavaPlugin getInstance() {

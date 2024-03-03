@@ -1,5 +1,6 @@
 package mintychochip.genesis.util;
 
+import com.fathzer.soft.javaluator.DoubleEvaluator;
 import com.fathzer.soft.javaluator.StaticVariableSet;
 import mintychochip.genesis.Genesis;
 import org.bukkit.Location;
@@ -9,6 +10,10 @@ import java.util.Random;
 
 public class MathUtil {
 
+    private final DoubleEvaluator evaluator;
+    public MathUtil(DoubleEvaluator evaluator) {
+        this.evaluator = evaluator;
+    }
     private final Random random = new Random();
 
     public static boolean finishedDuration(double duration, long start) {
@@ -65,8 +70,8 @@ public class MathUtil {
         return elapsedSeconds(timestamp) >= duration;
     }
 
-    public static double evaluateFunction(String function, StaticVariableSet<Double> variableSet) {
-        return Genesis.getParser().evaluate(function, variableSet);
+    public double evaluateFunction(String function, StaticVariableSet<Double> variableSet) {
+        return evaluator.evaluate(function, variableSet);
     }
 
     public Random getRandom() {

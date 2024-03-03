@@ -1,7 +1,6 @@
 package mintychochip.genesis.container;
 
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class GenesisDropTableEntry {
 
