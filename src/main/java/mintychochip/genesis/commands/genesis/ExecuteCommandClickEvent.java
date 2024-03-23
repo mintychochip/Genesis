@@ -1,17 +1,11 @@
 package mintychochip.genesis.commands.genesis;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import mintychochip.genesis.Genesis;
 import mintychochip.genesis.commands.abstraction.GenericCommandObject;
 import mintychochip.genesis.commands.abstraction.SubCommand;
-import mintychochip.genesis.container.ClickableActionData;
-import mintychochip.genesis.container.Trigger;
 import mintychochip.genesis.container.items.actions.ActionPacket;
-import mintychochip.genesis.container.items.actions.EventAction;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -56,17 +50,9 @@ public class ExecuteCommandClickEvent extends GenericCommandObject implements Su
                 return false;
             }
             PersistentDataContainer persistentDataContainer = itemMeta.getPersistentDataContainer();
-
-            ClickableActionData clickableActionData;
-
             if(!persistentDataContainer.has(Genesis.getKey("clickable"),PersistentDataType.STRING)) {
-                clickableActionData = new ClickableActionData();
             } else {
-                clickableActionData = gson.fromJson(persistentDataContainer.get(Genesis.getKey("clickable"),PersistentDataType.STRING), ClickableActionData.class);
             }
-            clickableActionData.addActionPacket(key,actionPacket);
-
-            Genesis.getSerializer().serializeToItem(clickableActionData,itemInMainHand);
         }
         return true;
     }

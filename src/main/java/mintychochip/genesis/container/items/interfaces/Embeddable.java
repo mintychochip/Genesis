@@ -9,6 +9,8 @@ public interface Embeddable {
 
     NamespacedKey getKey();
 
+    String getSimpleKey();
+
     default String getType() {
         return this.getClass().getName();
     }

@@ -11,48 +11,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public class AbstractItemClickEvent extends Event implements Cancellable {
+public class AbstractItemClickEvent extends AbstractItemActivationEvent implements Cancellable {
 
-    private final AbstractItem item;
-    private final Player clicker;
-    private Map<String,ActionPacket> packets;
 
-    private boolean cancelled;
-    public AbstractItemClickEvent(AbstractItem item, Player clicker, Map<String,ActionPacket> packets) {
-        this.item = item;
-        this.clicker = clicker;
-        this.packets = packets;
+    private AbstractItemClickEvent(@NotNull AbstractItem clickedItem, @NotNull Player player, @NotNull Map<String, ActionPacket> packets) {
+        super(clickedItem, player, packets);
     }
 
-    public Map<String, ActionPacket> getPackets() {
-        return packets;
-    }
-
-    public AbstractItem getItem() {
-        return item;
-    }
-
-    public Player getClicker() {
-        return clicker;
-    }
-
-    private static final HandlerList handlers = new HandlerList();
-    @NotNull
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean b) {
-        cancelled = b;
+    public static AbstractItemClickEvent createInstance(AbstractItem item, Player player, Map<String, ActionPacket> packets, ItemActionEventFactory instance) {
+        return new AbstractItemClickEvent(item,player,packets);
     }
 }

@@ -5,31 +5,24 @@ import mintychochip.genesis.Genesis;
 import mintychochip.genesis.color.GenesisTheme;
 import mintychochip.genesis.config.GenesisRegistry;
 import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
-import mintychochip.genesis.container.ClickableActionData;
 import mintychochip.genesis.container.items.actions.ActionPacket;
-import mintychochip.genesis.container.items.actions.EventAction;
 import mintychochip.genesis.container.items.interfaces.Appraisable;
 import mintychochip.genesis.container.items.interfaces.Embeddable;
+import mintychochip.genesis.events.ActionEventType;
 import mintychochip.genesis.util.GenesisConfigMarker;
 import mintychochip.genesis.util.Rarity;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
+import org.bukkit.NamespacedKey;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.format.NamedTextColor.GREEN;
 import static net.kyori.adventure.text.format.TextColor.color;
 
 public class AbstractItem {
@@ -144,7 +137,7 @@ public class AbstractItem {
             this.setUnbreakable(main.getBoolean(GenesisConfigMarker.unbreakable))
                     .setCustomModelData(main.getInt(GenesisConfigMarker.custom_model))
                     .setDisplayName(main.getString(GenesisConfigMarker.display_name))
-                    .setUnstackable(main.getBoolean(GenesisConfigMarker.custom_model));
+                    .setUnstackable(main.getBoolean(GenesisConfigMarker.unstackable));
             List<String> lore = main.getStringList(GenesisConfigMarker.lore);
             if (lore != null) {
                 this.addLore(lore);
@@ -158,42 +151,48 @@ public class AbstractItem {
     }
 
     public static class EmbeddedDataBuilder extends ConfigurationItemBuilder {
-        protected List<Embeddable> embeddableList = new ArrayList<>();
+        protected Map<NamespacedKey, Embeddable> embeddableMap = new HashMap<>();
         protected Embeddable itemEmbeddable;
 
         public EmbeddedDataBuilder(JavaPlugin instance, Material material, GenesisConfigurationSection main, boolean boundOnCraft, String genesisTheme, Embeddable embeddable) {
             super(instance, material, main, boundOnCraft, genesisTheme);
             itemEmbeddable = embeddable;
-            embeddableList.add(embeddable);
+            embeddableMap.put(embeddable.getKey(), embeddable);
         }
 
         public EmbeddedDataBuilder(JavaPlugin instance, GenesisConfigurationSection main, boolean boundOnCraft, String genesisTheme, Embeddable embeddable) {
             super(instance, main, boundOnCraft, genesisTheme);
             itemEmbeddable = embeddable;
-            embeddableList.add(embeddable);
-            embeddableList.add(new ClickableActionData());
+            embeddableMap.put(embeddable.getKey(), embeddable);
         }
 
         public EmbeddedDataBuilder setRarity(Rarity rarity) {
-            if (embeddableList instanceof Appraisable appraisable) {
-                appraisable.setRarity(rarity);
+            if (itemEmbeddable instanceof Appraisable apr) {
+                apr.setRarity(rarity);
             }
             return this;
         }
 
-        public EmbeddedDataBuilder addClickEvent(String key, ActionPacket actionPacket) {
-            Embeddable clickable = null;
-            for (Embeddable embeddable : embeddableList) {
-                if (embeddable.getClass().getName().equalsIgnoreCase(ClickableActionData.class.getName())) {
-                    clickable = embeddable;
-                }
+        public EmbeddedDataBuilder addClickEvent(String actionPacketKey, ActionPacket packet) {
+            return this.addItemActivationEvent(actionPacketKey,packet,ActionEventType.CLICK);
+        }
+        public EmbeddedDataBuilder addItemActivationEvent(String actionPacketKey, ActionPacket packet, ActionEventType type) {
+            Embeddable embeddable = null;
+            if(!embeddableMap.containsKey(type.getKey())) {
+                embeddable = new ActionData(type);
+                embeddableMap.put(embeddable.getKey(),embeddable);
+            } else {
+                embeddable = embeddableMap.get(type.getKey());
             }
-            if (clickable instanceof ClickableActionData cad) {
-                cad.addActionPacket(key, actionPacket);
+            if(embeddable instanceof ActionData acd) {
+                acd.addActionPacket(actionPacketKey,packet);
             }
             return this;
         }
 
+        public EmbeddedDataBuilder addConsumeEvent(String actionPacketKey, ActionPacket actionPacket) {
+            return this.addItemActivationEvent(actionPacketKey,actionPacket,ActionEventType.CONSUME);
+        }
         public AbstractItem defaultBuild() {
             defaultSettings();
             Rarity rarity = main.enumFromSection(Rarity.class, GenesisConfigMarker.rarity);
@@ -201,13 +200,11 @@ public class AbstractItem {
                 this.setRarity(rarity).setDisplayName(rarity.getLegacyColor() + itemMeta.getDisplayName());
             }
             Gson gson = new Gson();
-            if (embeddableList != null) {
-                for (Embeddable embeddable : embeddableList) {
-                    if (embeddable.getKey() == null) {
-                        throw new RuntimeException("Embeddable key was null: " + embeddable.getType());
-                    }
-                    itemMeta.getPersistentDataContainer().set(embeddable.getKey(), PersistentDataType.STRING, gson.toJson(embeddable));
+            for (Embeddable embeddable : embeddableMap.values()) {
+                if (embeddable.getKey() == null) {
+                    throw new RuntimeException("Embeddable key was null: " + embeddable.getType());
                 }
+                itemMeta.getPersistentDataContainer().set(embeddable.getKey(), PersistentDataType.STRING, gson.toJson(embeddable));
             }
             return super.build();
         }

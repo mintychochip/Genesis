@@ -1,5 +1,6 @@
 package mintychochip.genesis.manager;
 
+import mintychochip.genesis.config.abstraction.GenesisConfigurationSection;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public abstract class GenericConfigManager {
@@ -11,5 +12,9 @@ public abstract class GenericConfigManager {
 
     public JavaPlugin getPlugin() {
         return plugin;
+    }
+
+    public GenesisConfigurationSection getConfig(String configName) {
+        return null;
     }
 }

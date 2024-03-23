@@ -16,6 +16,11 @@ public class ItemData implements Embeddable {
     }
 
     @Override
+    public String getSimpleKey() {
+        return "items";
+    }
+
+    @Override
     public String getType() {
         return null;
     }
